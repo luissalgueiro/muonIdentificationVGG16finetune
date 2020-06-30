@@ -46,9 +46,8 @@ for file in files:
             dataF = dataFil[dataFil['runID'] == runID]
             print(dataF.shape[0])
          
-  #          Ai = sparse.coo_matrix((4113, 900))
-            #for event_number in  range(1,dataF.shape[0]):
-            for event_number in  range(0,1):
+            Ai = sparse.coo_matrix((4113, 900))
+            for event_number in  range(1,dataF.shape[0]):
                 try:
                     X = dataF.xPix.values[event_number]
                     Y = dataF.yPix.values[event_number]
@@ -65,14 +64,10 @@ for file in files:
                         print('AlertaYmax')
                     #matriz sparse del evento
                     img = sparse.coo_matrix((W+min(W),(Y-min(Y),X-min(X))),shape = (max(Y)+1-min(Y),max(X)+1-min(X)))
- #                   Ai=Ai+sparse.coo_matrix((W, (X,Y)),shape=(4113, 900))
+                    Ai=Ai+sparse.coo_matrix((W, (X,Y)),shape=(4113, 900))
                     fitsName = PathOut+'Fits/' +str(runID)+ '/catalog' +str(runID)+ '_' +str(ohdu)+'_' + str(event_number) + '.fits'
-#                    print(fitsName)
-                    
                     fits.writeto(fitsName,img.toarray(),overwrite=True)
                 except ValueError:
                     print('error en catalog ' + file + str(event_number))
-           # if(os.path.isfile(fitsCatName)):
-            #    continue
-            #fits.writeto(fitsCatName,Ai.toarray())
+            fits.writeto(fitsCatName,Ai.toarray())
 
