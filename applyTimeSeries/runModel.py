@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,8 +5,6 @@ import pandas as pd
 import os
 import time 
 import tensorflow as tf
-#from tensorflow.contrib.data import Dataset, Iterator
-#import sklearn.cross_validation as sk
 import warnings; warnings.simplefilter('ignore')
 import cv2
 import matplotlib.pyplot as plt
@@ -39,39 +32,15 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 import numpy as np
+import pandas as pd
+import itertools
+from pickle import dump,load
+
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
 tf.config.experimental.set_memory_growth(physical_devices[0], True)
 #my_devices = tf.config.experimental.list_physical_devices(device_type='XLA_GPU')
 #tf.config.experimental.set_visible_devices(devices= my_devices, device_type='XLA_GPU')
-
-
-# In[2]:
-
-
-import pandas as pd
-
-
-# In[3]:
-
-
-from pickle import dump,load
-
-
-# In[4]:
-
-
-import itertools
-
-
-# In[5]:
-
-
 modelpath='modelos/VGG16-8020crossval/'
-
-
-# In[6]:
-
-
 json_file = open(modelpath+'model.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
@@ -82,37 +51,18 @@ loaded_model.load_weights(modelpath+"best_model.h5")
 print("Loaded model from disk")
 
 
-# In[7]:
-
-
 Data = pd.read_csv('NewmasterCatalogALLOHDU.csv')
 
-
-# In[8]:
-
-
 Data.head()
-
-
-# In[9]:
-
 
 Data.info()
 
 
-# In[10]:
 
-
-np.sum(Data.eventscut.values)
-
-
-# In[11]:
 
 
 Data.set_index(['datetime'],drop=True, inplace=True)
 
-
-# In[12]:
 
 
 ohdus=[2,3,4,5,6,7,8,9,10,11,12,13,14,15]
@@ -126,8 +76,6 @@ for ohdu in ohdus:
 
 fig.savefig("EventosAllOHDU.png")
 
-
-# In[13]:
 
 
 size=112
@@ -178,38 +126,14 @@ def preprocessing(rundID, ohdu,i,size):
 
 
 
-# In[14]:
-
-
 def chunker(seq, size):
     return (seq[pos:pos + size] for pos in range(0, len(seq), size))
 
 
-# In[15]:
 
-
-eventIdData = pd.read_csv('catalogTest.csv')
-
-
-# In[16]:
-
-
-eventIdData.head()
-
-
-# In[17]:
-
-
-eventIdData.info()
-
-
-# In[18]:
 
 
 Pwd='/tf/Documentos/CONNIEData/eventsFits/'
-
-
-# In[33]:
 
 
 from joblib import Parallel, delayed
@@ -217,14 +141,8 @@ import multiprocessing
 num_cores = multiprocessing.cpu_count()
 
 
-# In[37]:
 
 
-Data.sort_values(by=['ohdu'], inplace=True,ascending=False)
-Data.head()
-
-
-# In[38]:
 
 os.system('echo runID,ohdu,e_id>failed.csv')
     
@@ -240,19 +158,10 @@ for ck in chunker(Data,500):
         runID=row[1].runID.astype(int)
         ohdu=row[1].ohdu.astype(int)
         maxev=row[1].events.astype(int)
-        if(ohdu<6):
-            select=np.logical_and(eventIdData['runID'] == runID,eventIdData['ohdu'] == ohdu)
-            select=np.logical_and(select,eventIdData['flag'] == True)
-
-            events=eventIdData[select]
-            lista=np.setdiff1d(events['eventID'].values.astype(int),maxev)#[:-1]
-        else:
-            lista=np.linspace(1, maxev, maxev, endpoint=True).astype(int)
+        lista=np.linspace(1, maxev, maxev, endpoint=True).astype(int)
         muon=0
-      #  print('runID_'+str(runID)+ 'ohdu_' +str(ohdu))
         if(True):
             data=[]
-            #print(BS)
             data = Parallel(n_jobs=num_cores)(delayed(preprocessing)(runID, ohdu,i,size) for i in lista)
             #print(np.shape(data))
             DData =np.expand_dims(data, axis=3)
@@ -268,26 +177,12 @@ for ck in chunker(Data,500):
 
         muonsCount.append(muon)
     ck['muonCount']=muonsCountt
-    ck.to_csv('New80crosscatalogmuonsALLOHDUck'+str(i)+'.csv')
     
     muonsCountt=muonsCountt.append(muonsCount)
 dump(muonsCountt, open('New80croosmuonCountALLOHDU.pkl', 'wb'))
 
-
-
-
 Data['muonCount']=muonsCountt
 Data.to_csv('New80crosscatalogmuonsALLOHDU.csv')
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
 
 
 
