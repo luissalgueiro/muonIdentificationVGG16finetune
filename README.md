@@ -1,4 +1,4 @@
-In this repository we present, the scripts and notebooks were we develop muon identifier Convolutional Neural Network for CONNIE 1x5 experiment.
+In this repository we present, the scripts and notebooks developed fo muon identifier Convolutional Neural Network in CONNIE 1x5 experiment.
 
 Since all the runs are in root files we developed several extraction scripts:
 
@@ -25,7 +25,7 @@ We compute the classification results, the confusion matrix, and the performance
 
 - "fitModel/InspectModels.ipynb"
 
-Finally we apply our model to all events from the masteCatalog:
+Finally, we apply our model to all events from the masterCatalog:
 
 - "applyTimeSeries/runModel.py"
 - "applyTimeSeries/TimeSeriesAnalysis.ipynb" helps to analyze the time series obtained by the model.
