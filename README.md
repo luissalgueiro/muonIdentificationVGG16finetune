@@ -17,7 +17,7 @@ Human-determined categorical labels were assigned to our train-test sample:
 
 - "humanClassification/InspectHumanLabels.ipynb" can be used to inspect the labels assined.
 
-Then we apply data augmentation to balance our categories and make the model approximately invariant to random noise. Next, the model after the training and validation process applied with KFold cross-validation.
+Then we apply data augmentation to balance our categories and make the model approximately invariant to random noise. Next, the model after the training and validation process applied with KFold cross-validation.make 
 
 - "fitModel/TrainModel.ipynb"
 
