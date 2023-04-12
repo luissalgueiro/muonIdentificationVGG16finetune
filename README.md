@@ -1,4 +1,4 @@
-In this repository we present, the scripts and notebooks developed fo muon identifier Convolutional Neural Network in CONNIE 1x5 experiment.
+iiIn this repository we present, the scripts and notebooks developed fo muon identifier Convolutional Neural Network in CONNIE 1x5 experiment.
 
 Since all the runs are in root files we developed several extraction scripts:
 
